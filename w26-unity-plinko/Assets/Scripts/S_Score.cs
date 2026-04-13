@@ -15,7 +15,7 @@ public class Score : MonoBehaviour
     public void AddPoints(int points)
     {
         totalScore += points;
-        ScoreDisplay.text = $"SCORE: {totalScore}";
+        ScoreDisplay.text = $"\n{totalScore}";
         //Debug.Log($"Total score: {totalScore}");
     }
 }
