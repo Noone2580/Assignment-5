@@ -3,26 +3,108 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public int[] Balls = new int[5];
+    private GameObject[] leftBalls = new GameObject[5];
+    public int currentBall = 0;
     public float speed = 5;
+    public bool lockControlls = false;
+    public float distanceBetween = 3f;
+    public float distanceBetweenStart = 8f;
+
     public Score score;
     public GameObject ballPrefab;
     private GameObject currentDisc = null;
+    public GameObject ballRow;
+    public GameObject imageBall;
 
+    private void Start()
+    {
+
+    }
+
+    public void RemoveIndex(int index)
+    {
+        Destroy(leftBalls[index]);
+        UpdateRow();
+    }
+
+    public void UpdateRow()
+    {
+        Vector3 position = ballRow.transform.position;
+
+        for (int i = 0; i < Balls.Length; i++)
+        {
+            if (leftBalls[i] != null || !leftBalls[i].IsDestroyed())
+            {
+                if (i == currentBall)
+                {
+                    leftBalls[i].transform.position = position;
+                    position -= new Vector3(0, distanceBetweenStart, 0);
+                }
+                else
+                {
+                    leftBalls[i].transform.position = position;
+                    position -= new Vector3(0, distanceBetween, 0);
+                }
+
+            }
+        }
+    }
+
+    public void ResetRow()
+    {
+        currentBall = 0;
+        Vector3 position = ballRow.transform.position;
+
+        for (int j = 0; j < leftBalls.Length; j++)
+        {
+            if (leftBalls[j] != null)
+            {
+                Destroy(leftBalls[j]);
+            }
+        }
+
+        for (int i = 0; i < Balls.Length; i++)
+        {
+            if (i == 0)
+            {
+                leftBalls.SetValue(Instantiate(imageBall, position, Quaternion.identity), i);
+                position -= new Vector3(0, distanceBetweenStart, 0);
+            }
+            else
+            {
+                leftBalls.SetValue(Instantiate(imageBall, position, Quaternion.identity), i);
+                position -= new Vector3(0, distanceBetween, 0);
+            }
+
+        }
+    }
 
     void Update()
     {
+        if (lockControlls) { return; }
+
         // Move player horizontally
         float moveX = Input.GetAxis("Horizontal") * Time.deltaTime * speed;
         Vector3 position = transform.position;
         position.x += moveX;
         transform.position = position;
 
+        // Move player vertical
+        float moveY = Input.GetAxis("Vertical") * Time.deltaTime * speed;
+        position = transform.position;
+        position.y += moveY;
+        transform.position = position;
+
+
         // Drop disc
-        if (Input.GetKeyDown(KeyCode.Space) && currentDisc == null)
+        if (Input.GetKeyDown(KeyCode.Space) && currentDisc == null && currentBall < Balls.Length)
         {
             // Clone prefab
             currentDisc = Instantiate(ballPrefab, transform.position, Quaternion.identity);
             currentDisc.GetComponent<S_Ball>().score = score;
+            RemoveIndex(currentBall);
+            currentBall++;
         }
     }
 }
