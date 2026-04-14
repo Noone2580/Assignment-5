@@ -1,10 +1,13 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
     public float speed = 5;
-    public GameObject discPrefab;
+    public Score score;
+    public GameObject ballPrefab;
     private GameObject currentDisc = null;
+
 
     void Update()
     {
@@ -18,7 +21,8 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && currentDisc == null)
         {
             // Clone prefab
-            currentDisc = Instantiate(discPrefab, transform.position, Quaternion.identity);
+            currentDisc = Instantiate(ballPrefab, transform.position, Quaternion.identity);
+            currentDisc.GetComponent<S_Ball>().score = score;
         }
     }
 }

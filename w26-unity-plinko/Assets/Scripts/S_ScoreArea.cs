@@ -7,7 +7,7 @@ public class ScoreArea : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collider2d)
     {
-        score.AddPoints(points);
+        score.AddBallPoints(points, collider2d.gameObject.GetComponent<S_Ball>());
     }
 
     private void OnTriggerExit2D(Collider2D collider2d)
