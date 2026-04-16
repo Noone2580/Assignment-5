@@ -32,6 +32,12 @@ public class Score : MonoBehaviour
         AddMulitplyer(0);
     }
 
+    public bool CheckIfWin() 
+    {
+        if (totalScore >= goalScore)
+            return true;
+        return false;
+    }
 
     /// <summary>
     ///     Used for adding points to the round
@@ -104,6 +110,12 @@ public class Score : MonoBehaviour
     {
         player.lockControlls = true;
         SceneManager.LoadSceneAsync("Shop", LoadSceneMode.Additive);
+    }
+
+    public void GameOver() 
+    {
+        player.lockControlls = true;
+        SceneManager.LoadSceneAsync("GameOver", LoadSceneMode.Additive);
     }
 
     public void FixedUpdate()

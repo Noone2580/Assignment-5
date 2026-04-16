@@ -9,7 +9,8 @@ public class Player : MonoBehaviour
     public float speed = 5;
     public bool lockControlls = false;
     public float distanceBetween = 3f;
-    public float distanceBetweenStart = 8f;
+    public float distanceBetweenStart = 4f;
+    private bool gameOver = false;
 
     public Score score;
     public GameObject ballPrefab;
@@ -25,7 +26,6 @@ public class Player : MonoBehaviour
     public void RemoveIndex(int index)
     {
         Destroy(leftBalls[index]);
-        UpdateRow();
     }
 
     public void UpdateRow()
@@ -53,6 +53,7 @@ public class Player : MonoBehaviour
 
     public void ResetRow()
     {
+        gameOver = false;
         currentBall = 0;
         Vector3 position = ballRow.transform.position;
 
@@ -64,19 +65,29 @@ public class Player : MonoBehaviour
             }
         }
 
+        leftBalls = new GameObject[Balls.Length];
+
         for (int i = 0; i < Balls.Length; i++)
         {
             if (i == 0)
             {
-                leftBalls.SetValue(Instantiate(imageBall, position, Quaternion.identity), i);
+                leftBalls[i] = Instantiate(imageBall, position, Quaternion.identity);
                 position -= new Vector3(0, distanceBetweenStart, 0);
             }
             else
             {
-                leftBalls.SetValue(Instantiate(imageBall, position, Quaternion.identity), i);
+                leftBalls[i] = Instantiate(imageBall, position, Quaternion.identity);
                 position -= new Vector3(0, distanceBetween, 0);
             }
+        }
+    }
 
+    void CanGameOver() 
+    {
+        if (currentBall >= Balls.Length && currentDisc == null && !gameOver && !score.CheckIfWin())
+        {
+            score.GameOver();
+            gameOver = true;
         }
     }
 
@@ -90,13 +101,6 @@ public class Player : MonoBehaviour
         position.x += moveX;
         transform.position = position;
 
-        // Move player vertical
-        float moveY = Input.GetAxis("Vertical") * Time.deltaTime * speed;
-        position = transform.position;
-        position.y += moveY;
-        transform.position = position;
-
-
         // Drop disc
         if (Input.GetKeyDown(KeyCode.Space) && currentDisc == null && currentBall < Balls.Length)
         {
@@ -105,6 +109,10 @@ public class Player : MonoBehaviour
             currentDisc.GetComponent<S_Ball>().score = score;
             RemoveIndex(currentBall);
             currentBall++;
+            UpdateRow();
+
         }
+
+        CanGameOver();
     }
 }
