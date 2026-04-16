@@ -4,8 +4,9 @@ using UnityEngine;
 public class S_Peg : MonoBehaviour
 {
     public Score score;
+    public int type = 0;
     public int points = 10;
-    public float bounceForce = 2;
+    public float bounceForce = 0f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -20,17 +21,16 @@ public class S_Peg : MonoBehaviour
             score.AddBallPoints(points, collision.gameObject.GetComponent<S_Ball>());
 
             Vector2 bounce = collision.gameObject.GetComponent<Rigidbody2D>().linearVelocity;
-            bounce.Normalize();
-
+            bounce = bounce.normalized;
             bounce *= bounceForce;
 
             collision.gameObject.GetComponent<Rigidbody2D>().AddForce(bounce, ForceMode2D.Impulse);
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
+    //// Update is called once per frame
+    //void Update()
+    //{
 
-    }
+    //}
 }
