@@ -19,9 +19,14 @@ public class Player : MonoBehaviour
     public GameObject imageBall;
 
 
+    Quaternion rotation;
+    Quaternion Endrotation;
+
     private void Start()
     {
-
+        rotation = transform.rotation;
+        Endrotation.eulerAngles = new Vector3(0,0,90);
+        Endrotation *= rotation;
     }
 
     public void RemoveIndex(int index)
@@ -111,8 +116,17 @@ public class Player : MonoBehaviour
             RemoveIndex(currentBall);
             currentBall++;
             UpdateRow();
-
         }
+
+        if (Input.GetKey(KeyCode.W)) 
+        {
+            transform.rotation = Quaternion.Lerp(transform.rotation, Endrotation, 10 * Time.deltaTime);
+        }
+        else 
+        {
+            transform.rotation = Quaternion.Lerp(transform.rotation, rotation, 10 * Time.deltaTime);
+        }
+
 
         CanGameOver();
     }
