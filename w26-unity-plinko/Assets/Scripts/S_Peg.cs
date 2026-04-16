@@ -5,7 +5,7 @@ public class S_Peg : MonoBehaviour
 {
     public Score score;
     public int points = 10;
-    public float bounceForce = 10;
+    public float bounceForce = 2;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -19,10 +19,12 @@ public class S_Peg : MonoBehaviour
         {
             score.AddBallPoints(points, collision.gameObject.GetComponent<S_Ball>());
 
+            Vector2 bounce = collision.gameObject.GetComponent<Rigidbody2D>().linearVelocity;
+            bounce.Normalize();
 
-            Vector2 bounce = Vector2.Normalize( collision.gameObject.GetComponent<Rigidbody2D>().linearVelocity);
+            bounce *= bounceForce;
 
-            collision.gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(50, 0), ForceMode2D.Impulse);
+            collision.gameObject.GetComponent<Rigidbody2D>().AddForce(bounce, ForceMode2D.Impulse);
         }
     }
 
