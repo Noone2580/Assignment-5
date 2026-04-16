@@ -27,5 +27,6 @@ public class S_Shop : MonoBehaviour
     void Update()
     {
         
+
     }
 }

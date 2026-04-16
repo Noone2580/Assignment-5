@@ -8,8 +8,8 @@ public class Player : MonoBehaviour
     public int currentBall = 0;
     public float speed = 5;
     public bool lockControlls = false;
-    public float distanceBetween = 3f;
-    public float distanceBetweenStart = 4f;
+    public float distanceBetween = 3;
+    public float distanceBetweenStart = 4;
     private bool gameOver = false;
 
     public Score score;
@@ -17,6 +17,7 @@ public class Player : MonoBehaviour
     private GameObject currentDisc = null;
     public GameObject ballRow;
     public GameObject imageBall;
+
 
     private void Start()
     {
@@ -39,7 +40,7 @@ public class Player : MonoBehaviour
                 if (i == currentBall)
                 {
                     leftBalls[i].transform.position = position;
-                    position -= new Vector3(0, distanceBetweenStart, 0);
+                    position -= new Vector3(0, 4, 0);
                 }
                 else
                 {
@@ -72,7 +73,7 @@ public class Player : MonoBehaviour
             if (i == 0)
             {
                 leftBalls[i] = Instantiate(imageBall, position, Quaternion.identity);
-                position -= new Vector3(0, distanceBetweenStart, 0);
+                position -= new Vector3(0, 4, 0);
             }
             else
             {
